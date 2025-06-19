@@ -1,0 +1,4 @@
+nats-py>=2.6.0
+opentelemetry-sdk>=1.22.0
+opentelemetry-exporter-otlp>=1.22.0
+# opentelemetry-instrumentation-nats>=0.45b0

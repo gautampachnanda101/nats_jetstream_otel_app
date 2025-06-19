@@ -1,0 +1,42 @@
+services:
+  nats:
+    image: nats
+    ports:
+      - "4222:4222"
+    command: ["-js"]
+    networks:
+      - default
+  otel-lgtm:
+    image: grafana/otel-lgtm
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "3000:3000"
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol/config.yaml
+    networks:
+      - default
+  app:
+    build: .
+    depends_on:
+      - nats
+      -  otel-lgtm
+    networks:
+      - default
+networks:
+  default:
+    driver: bridge
+volumes:
+  otel-collector-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./otel-collector-config.yaml
+      o: bind
+
+  app-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./app/data
+      o: bind
